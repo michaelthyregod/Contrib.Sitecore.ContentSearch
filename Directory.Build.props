@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project> 
+    <PropertyGroup>
+        <Product>Contribution project for Sitecore ContentSearch</Product>
+        <Title>Contrib.Sitecore.ContentSearch</Title>
+        <PackageProjectUrl>https://github.com/michaelthyregod/Contrib.Sitecore.ContentSearch</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/michaelthyregod/Contrib.Sitecore.ContentSearch/blob/master/LICENSE</PackageLicenseUrl>
+        <Description>Contribution project for Sitecore ContentSearch</Description>
+        <Authors>Michael Thyregod</Authors>        
+    </PropertyGroup>
+</Project>
