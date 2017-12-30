@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using Sitecore.Configuration;
@@ -11,31 +10,23 @@ using Sitecore.Reflection;
 
 namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 {
-    public class MediaItemContentExtractor : AbstractComputedIndexField
+    public sealed class MediaItemContentExtractor : AbstractComputedIndexField
     {
-        protected static readonly ConcurrentDictionary<string, IComputedIndexField> MimeTypeComputedFields =
-            new ConcurrentDictionary<string, IComputedIndexField>();
+        private readonly Dictionary<string, IComputedIndexField> _mimeTypeComputedFields =
+            new Dictionary<string, IComputedIndexField>();
 
-        protected static readonly ConcurrentDictionary<string, IComputedIndexField> ExtensionComputedFields =
-            new ConcurrentDictionary<string, IComputedIndexField>();
+        private readonly Dictionary<string, IComputedIndexField> _extensionComputedFields =
+            new Dictionary<string, IComputedIndexField>();
 
-        protected static readonly ConcurrentBag<IComputedIndexField> FallbackComputedIndexFields = new ConcurrentBag<IComputedIndexField>();
+        private readonly List<IComputedIndexField> _fallbackComputedIndexFields = new List<IComputedIndexField>();
 
-        protected readonly List<XmlNode> ExtensionIncludes;
+        private readonly List<XmlNode> _extensionIncludes;
 
-        protected readonly List<XmlNode> ExtensionExcludes;
+        private readonly List<XmlNode> _extensionExcludes;
 
-        protected readonly List<XmlNode> MimeTypeIncludes;
+        private readonly List<XmlNode> _mimeTypeIncludes;
 
-        protected readonly List<XmlNode> MimeTypeExcludes;
-
-        private AbstractComputedIndexField _extractor;
-
-        protected AbstractComputedIndexField Extractor
-        {
-            get => _extractor ?? (_extractor = new MediaItemTikaOnDotNetTextExtractor());
-            set => _extractor = value ?? new MediaItemTikaOnDotNetTextExtractor();
-        }
+        private readonly List<XmlNode> _mimeTypeExcludes;
 
         public MediaItemContentExtractor()
             : this(null)
@@ -44,10 +35,10 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 
         public MediaItemContentExtractor(XmlNode configurationNode)
         {
-            ExtensionExcludes = new List<XmlNode>();
-            ExtensionIncludes = new List<XmlNode>();
-            MimeTypeExcludes = new List<XmlNode>();
-            MimeTypeIncludes = new List<XmlNode>();
+            _extensionExcludes = new List<XmlNode>();
+            _extensionIncludes = new List<XmlNode>();
+            _mimeTypeExcludes = new List<XmlNode>();
+            _mimeTypeIncludes = new List<XmlNode>();
             Initialize(configurationNode);
         }
 
@@ -63,7 +54,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 
             if (!string.IsNullOrEmpty(mimeTypeField?.Value))
             {
-                if (MimeTypeComputedFields.TryGetValue(mimeTypeField.Value.ToLowerInvariant(), out computedField))
+                if (_mimeTypeComputedFields.TryGetValue(mimeTypeField.Value.ToLowerInvariant(), out computedField))
                 {
                     return computedField.ComputeFieldValue((SitecoreIndexableItem) item);
                 }
@@ -73,17 +64,17 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 
             if (!string.IsNullOrEmpty(extensionField?.Value))
             {
-                if (ExtensionComputedFields.TryGetValue(extensionField.Value.ToLowerInvariant(), out computedField))
+                if (_extensionComputedFields.TryGetValue(extensionField.Value.ToLowerInvariant(), out computedField))
                 {
                     return computedField.ComputeFieldValue((SitecoreIndexableItem) item);
                 }
             }
 
-            foreach (var fallback in FallbackComputedIndexFields)
+            foreach (var fallback in _fallbackComputedIndexFields)
             {
-                if (mimeTypeField != null && extensionField != null && (ExtensionExcludes.Select(node => node.InnerText)
+                if (mimeTypeField != null && extensionField != null && (_extensionExcludes.Select(node => node.InnerText)
                                                                             .Contains(extensionField.Value.ToLowerInvariant()) ||
-                                                                        MimeTypeExcludes.Select(node => node.InnerText)
+                                                                        _mimeTypeExcludes.Select(node => node.InnerText)
                                                                             .Contains(mimeTypeField.Value.ToLowerInvariant())))
                 {
                     return null;
@@ -110,7 +101,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             Assert.ArgumentNotNull(mimeType, "mimeType");
             Assert.ArgumentNotNull(computedField, "computedField");
 
-            MimeTypeComputedFields[mimeType] = computedField;
+            _mimeTypeComputedFields[mimeType] = computedField;
         }
 
         private void AddMediaItemContentExtractorByFileExtension(string extension, IComputedIndexField computedField)
@@ -118,21 +109,24 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             Assert.ArgumentNotNull(extension, "extension");
             Assert.ArgumentNotNull(computedField, "computedField");
 
-            ExtensionComputedFields[extension] = computedField;
+            _extensionComputedFields[extension] = computedField;
         }
 
         private void AddFallbackMediaItemContentExtractor(IComputedIndexField computedField)
         {
             Assert.ArgumentNotNull(computedField, "computedField");
-            FallbackComputedIndexFields.Add(computedField);
+
+            _fallbackComputedIndexFields.Insert(0, computedField);
         }
 
-        public void Initialize(XmlNode configurationNode)
+        private void Initialize(XmlNode configurationNode)
         {
             if (configurationNode == null)
             {
                 return;
             }
+
+            var extractor = new MediaItemTikaOnDotNetTextExtractor();
 
             XmlNode mediaIndexing = null;
             if (configurationNode.ChildNodes.Count > 0)
@@ -166,7 +160,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             }
             else
             {
-                ExtensionIncludes.AddRange(Transform<XmlNode>(node.ChildNodes));
+                _extensionIncludes.AddRange(Transform<XmlNode>(node.ChildNodes));
             }
 
             node = mediaIndexing.SelectSingleNode("extensions/excludes");
@@ -176,14 +170,14 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             }
             else
             {
-                ExtensionExcludes.AddRange(Transform<XmlNode>(node.ChildNodes));
+                _extensionExcludes.AddRange(Transform<XmlNode>(node.ChildNodes));
             }
 
-            if (ExtensionExcludes.Count == 1)
+            if (_extensionExcludes.Count == 1)
             {
-                if (ExtensionExcludes.First().InnerText == "*")
+                if (_extensionExcludes.First().InnerText == "*")
                 {
-                    foreach (var extensionInculde in ExtensionIncludes)
+                    foreach (var extensionInculde in _extensionIncludes)
                     {
                         if (extensionInculde.Attributes?["type"] != null)
                         {
@@ -193,21 +187,21 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                         }
                         else
                         {
-                            AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText, Extractor);
+                            AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText, extractor);
                         }
                     }
                 }
             }
-            else if (ExtensionIncludes.Count == 1)
+            else if (_extensionIncludes.Count == 1)
             {
-                if (ExtensionIncludes.First().InnerText == "*")
+                if (_extensionIncludes.First().InnerText == "*")
                 {
-                    AddFallbackMediaItemContentExtractor(Extractor);
+                    AddFallbackMediaItemContentExtractor(extractor);
                 }
             }
             else
             {
-                foreach (var extensionInculde in ExtensionIncludes)
+                foreach (var extensionInculde in _extensionIncludes)
                 {
                     if (extensionInculde.Attributes?["type"] != null)
                     {
@@ -217,7 +211,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                     }
                     else
                     {
-                        AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText, Extractor);
+                        AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText, extractor);
                     }
                 }
             }
@@ -229,7 +223,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             }
             else
             {
-                MimeTypeIncludes.AddRange(Transform<XmlNode>(node.ChildNodes));
+                _mimeTypeIncludes.AddRange(Transform<XmlNode>(node.ChildNodes));
             }
 
             node = mediaIndexing.SelectSingleNode("mimeTypes/excludes");
@@ -239,14 +233,14 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             }
             else
             {
-                MimeTypeExcludes.AddRange(Transform<XmlNode>(node.ChildNodes));
+                _mimeTypeExcludes.AddRange(Transform<XmlNode>(node.ChildNodes));
             }
 
-            if (MimeTypeExcludes.Count == 1)
+            if (_mimeTypeExcludes.Count == 1)
             {
-                if (MimeTypeExcludes.First().InnerText == "*")
+                if (_mimeTypeExcludes.First().InnerText == "*")
                 {
-                    foreach (var mimeTypeInclude in MimeTypeIncludes)
+                    foreach (var mimeTypeInclude in _mimeTypeIncludes)
                     {
                         if (mimeTypeInclude.Attributes?["type"] != null)
                         {
@@ -256,21 +250,21 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                         }
                         else
                         {
-                            AddMediaItemContentExtractorByMimeType(mimeTypeInclude.InnerText, Extractor);
+                            AddMediaItemContentExtractorByMimeType(mimeTypeInclude.InnerText, extractor);
                         }
                     }
                 }
             }
-            else if (MimeTypeIncludes.Count == 1)
+            else if (_mimeTypeIncludes.Count == 1)
             {
-                if (MimeTypeIncludes.First().InnerText == "*")
+                if (_mimeTypeIncludes.First().InnerText == "*")
                 {
-                    AddFallbackMediaItemContentExtractor(Extractor);
+                    AddFallbackMediaItemContentExtractor(extractor);
                 }
             }
             else
             {
-                foreach (var mimeTypeInclude in MimeTypeIncludes)
+                foreach (var mimeTypeInclude in _mimeTypeIncludes)
                 {
                     if (mimeTypeInclude.Attributes?["type"] != null)
                     {
@@ -281,7 +275,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                     }
                     else
                     {
-                        AddMediaItemContentExtractorByMimeType(mimeTypeInclude.InnerText, Extractor);
+                        AddMediaItemContentExtractorByMimeType(mimeTypeInclude.InnerText, extractor);
                     }
                 }
             }
