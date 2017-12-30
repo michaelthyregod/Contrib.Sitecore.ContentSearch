@@ -13,6 +13,29 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 {
     public class MediaItemTikaOnDotNetTextExtractor : AbstractComputedIndexField
     {
+        private MediaProvider _mediaProvider;
+        private string _mediaIndexingFolder;
+        private TextExtractor _textExtractor;
+
+        protected MediaProvider MediaProvider
+        {
+            get => _mediaProvider ?? (_mediaProvider = new MediaProvider());
+            set => _mediaProvider = value ?? new MediaProvider();
+        }
+
+        protected string MediaIndexingFolder
+        {
+            get => _mediaIndexingFolder ?? (_mediaIndexingFolder = ContentSearchConfigurationSettingsWrapper.MediaIndexingFolder);
+            set => _mediaIndexingFolder = value ?? ContentSearchConfigurationSettingsWrapper.MediaIndexingFolder;
+        }
+
+        protected TextExtractor TextExtractor
+        {
+            get => _textExtractor ?? (_textExtractor = new TextExtractor());
+            set => _textExtractor = value ?? new TextExtractor();
+        }
+
+
         public override object ComputeFieldValue(IIndexable indexable)
         {
             Item item = indexable as SitecoreIndexableItem;
@@ -21,7 +44,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                 return null;
             }
 
-            var media = MediaManager.GetMedia(item);
+            var media = MediaProvider.GetMedia(item);
 
             if (media == null)
             {
@@ -33,7 +56,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                 return null;
             }
 
-            var mediaIndexingFolder = ContentSearchConfigurationSettingsWrapper.MediaIndexingFolder;
+            var mediaIndexingFolder = MediaIndexingFolder;
             var fileName = $"{Guid.NewGuid()}-{item.Name}.{item.Fields["Extension"].Value}";
 
             var tempFilePath = FileUtil.MakePath(mediaIndexingFolder, fileName);
@@ -60,8 +83,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 
                 try
                 {
-                    var textExtractor = new TextExtractor();
-                    return textExtractor.Extract(tempFilePath);
+                    return TextExtractor.Extract(tempFilePath);
                 }
                 catch (Exception e)
                 {

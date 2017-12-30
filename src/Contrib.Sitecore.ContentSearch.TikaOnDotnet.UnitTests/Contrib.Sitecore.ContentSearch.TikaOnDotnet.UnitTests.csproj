@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net452</TargetFramework>
+        <SitecoreVersion Condition=" '$(SitecoreVersion)' == '' ">8.2.161115</SitecoreVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+        <PackageReference Include="xunit" Version="2.3.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Contrib.Sitecore.ContentSearch.TikaOnDotnet\Contrib.Sitecore.ContentSearch.TikaOnDotnet.csproj" />
+    </ItemGroup>
+</Project>
