@@ -3,11 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="TikaOnDotnet.TextExtractor" Version="1.16.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Sitecore.ContentSearch" Version="8.2.160729" />
+      <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="8.2.161115" />
+      <PackageReference Include="Sitecore.Kernel.NoReferences" Version="8.2.161115" />
   </ItemGroup>
 </Project>

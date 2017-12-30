@@ -34,7 +34,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             }
 
             var mediaIndexingFolder = ContentSearchConfigurationSettingsWrapper.MediaIndexingFolder;
-            var fileName = string.Format("{0}-{1}.{2}", Guid.NewGuid(), item.Name, item.Fields["Extension"].Value);
+            var fileName = $"{Guid.NewGuid()}-{item.Name}.{item.Fields["Extension"].Value}";
 
             var tempFilePath = FileUtil.MakePath(mediaIndexingFolder, fileName);
 

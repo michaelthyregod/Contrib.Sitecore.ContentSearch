@@ -10,7 +10,7 @@ using Sitecore.Reflection;
 
 namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 {
-    public class MediaItemContentExtractor : AbstractComputedIndexField
+    public sealed class MediaItemContentExtractor : AbstractComputedIndexField
     {
         private readonly Dictionary<string, IComputedIndexField> _mimeTypeComputedFields =
             new Dictionary<string, IComputedIndexField>();
@@ -52,7 +52,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 
             var mimeTypeField = item.Fields["Mime Type"];
 
-            if (mimeTypeField != null && !string.IsNullOrEmpty(mimeTypeField.Value))
+            if (!string.IsNullOrEmpty(mimeTypeField?.Value))
             {
                 if (_mimeTypeComputedFields.TryGetValue(mimeTypeField.Value.ToLowerInvariant(), out computedField))
                 {
@@ -62,7 +62,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 
             var extensionField = item.Fields["Extension"];
 
-            if (extensionField != null && !string.IsNullOrEmpty(extensionField.Value))
+            if (!string.IsNullOrEmpty(extensionField?.Value))
             {
                 if (_extensionComputedFields.TryGetValue(extensionField.Value.ToLowerInvariant(), out computedField))
                 {
@@ -96,7 +96,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             return enumerable.Cast<object>().Where(current => (current as XmlElement) != null).Cast<T>();
         }
 
-        protected void AddMediaItemContentExtractorByMimeType(string mimeType, IComputedIndexField computedField)
+        private void AddMediaItemContentExtractorByMimeType(string mimeType, IComputedIndexField computedField)
         {
             Assert.ArgumentNotNull(mimeType, "mimeType");
             Assert.ArgumentNotNull(computedField, "computedField");
@@ -104,7 +104,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             _mimeTypeComputedFields[mimeType] = computedField;
         }
 
-        protected void AddMediaItemContentExtractorByFileExtension(string extension, IComputedIndexField computedField)
+        private void AddMediaItemContentExtractorByFileExtension(string extension, IComputedIndexField computedField)
         {
             Assert.ArgumentNotNull(extension, "extension");
             Assert.ArgumentNotNull(computedField, "computedField");
@@ -112,19 +112,14 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             _extensionComputedFields[extension] = computedField;
         }
 
-        protected void AddFallbackMediaItemContentExtractor(IComputedIndexField computedField)
+        private void AddFallbackMediaItemContentExtractor(IComputedIndexField computedField)
         {
             Assert.ArgumentNotNull(computedField, "computedField");
 
             _fallbackComputedIndexFields.Insert(0, computedField);
         }
 
-        protected virtual void Initialize()
-        {
-            Initialize(null);
-        }
-
-        protected virtual void Initialize(XmlNode configurationNode)
+        private void Initialize(XmlNode configurationNode)
         {
             if (configurationNode == null)
             {
@@ -137,21 +132,18 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             if (configurationNode.ChildNodes.Count > 0)
             {
                 mediaIndexing = configurationNode.SelectSingleNode("mediaIndexing");
-                if (mediaIndexing != null)
+                if (mediaIndexing?.Attributes?["ref"] != null)
                 {
-                    if (mediaIndexing.Attributes != null && mediaIndexing.Attributes["ref"] != null)
+                    var mediaIndexingLocation = mediaIndexing.Attributes["ref"].Value;
+                    if (string.IsNullOrEmpty(mediaIndexingLocation))
                     {
-                        var mediaIndexingLocation = mediaIndexing.Attributes["ref"].Value;
-                        if (string.IsNullOrEmpty(mediaIndexingLocation))
-                        {
-                            Log.Error(
-                                "<mediaIndexing> configuration error: \"ref\" attribute in mediaindexing section cannot be empty.",
-                                this);
-                            return;
-                        }
-
-                        mediaIndexing = Factory.GetConfigNode(mediaIndexingLocation);
+                        Log.Error(
+                            "<mediaIndexing> configuration error: \"ref\" attribute in mediaindexing section cannot be empty.",
+                            this);
+                        return;
                     }
+
+                    mediaIndexing = Factory.GetConfigNode(mediaIndexingLocation);
                 }
             }
 
@@ -187,7 +179,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                 {
                     foreach (var extensionInculde in _extensionIncludes)
                     {
-                        if (extensionInculde.Attributes != null && extensionInculde.Attributes["type"] != null)
+                        if (extensionInculde.Attributes?["type"] != null)
                         {
                             AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText,
                                 ReflectionUtil.CreateObject(extensionInculde.Attributes["type"].Value) as
@@ -211,7 +203,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             {
                 foreach (var extensionInculde in _extensionIncludes)
                 {
-                    if (extensionInculde.Attributes != null && extensionInculde.Attributes["type"] != null)
+                    if (extensionInculde.Attributes?["type"] != null)
                     {
                         AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText,
                             ReflectionUtil.CreateObject(extensionInculde.Attributes["type"].Value) as
@@ -250,7 +242,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                 {
                     foreach (var mimeTypeInclude in _mimeTypeIncludes)
                     {
-                        if (mimeTypeInclude.Attributes != null && mimeTypeInclude.Attributes["type"] != null)
+                        if (mimeTypeInclude.Attributes?["type"] != null)
                         {
                             AddMediaItemContentExtractorByMimeType(mimeTypeInclude.InnerText,
                                 ReflectionUtil.CreateObject(mimeTypeInclude.Attributes["type"].Value) as
@@ -274,7 +266,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             {
                 foreach (var mimeTypeInclude in _mimeTypeIncludes)
                 {
-                    if (mimeTypeInclude.Attributes != null && mimeTypeInclude.Attributes["type"] != null)
+                    if (mimeTypeInclude.Attributes?["type"] != null)
                     {
                         AddMediaItemContentExtractorByMimeType(mimeTypeInclude.InnerText,
                             ReflectionUtil.CreateObject(

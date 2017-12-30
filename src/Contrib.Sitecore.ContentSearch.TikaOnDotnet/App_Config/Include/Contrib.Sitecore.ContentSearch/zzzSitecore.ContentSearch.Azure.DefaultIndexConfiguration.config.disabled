@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/" xmlns:set="http://www.sitecore.net/xmlconfig/set/">
+    <sitecore>
+        <contentSearch>
+            <indexConfigurations>
+                <defaultCloudIndexConfiguration type="Sitecore.ContentSearch.Azure.CloudIndexConfiguration, Sitecore.ContentSearch.Azure">
+                    <documentOptions type="Sitecore.ContentSearch.Azure.CloudSearchDocumentBuilderOptions,Sitecore.ContentSearch.Azure">
+                        <fields hint="raw:AddComputedIndexField">
+                            <field fieldName="_content" type="Sitecore.ContentSearch.ComputedFields.MediaItemContentExtractor,Sitecore.ContentSearch">
+                                <patch:attribute name="type">Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields.MediaItemContentExtractor,Contrib.Sitecore.ContentSearch.TikaOnDotnet</patch:attribute>
+                            </field>
+                        </fields>
+                    </documentOptions>
+                </defaultCloudIndexConfiguration>
+            </indexConfigurations>
+        </contentSearch>
+    </sitecore>
+</configuration>
