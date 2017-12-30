@@ -1,7 +1,8 @@
 #Requires -Version 5.0
 
 param(
-    [string[]]$Tasks = @('default')
+    [string[]]$Tasks = @('default'),
+    [string[]]$NugetApiKey = ''
 )
 
 $init = Join-Path $PSScriptRoot init.ps1
@@ -41,6 +42,7 @@ try {
             outPath = $outPath
             Version = "1.0.0.0"
             SitecoreVersion = $sitecoreVersion
+            NugetApiKey = $NugetApiKey
         }
         
         Invoke-Psake (Join-Path $PSScriptRoot build.psake.ps1) -tasklist $tasks -Properties $props -nologo

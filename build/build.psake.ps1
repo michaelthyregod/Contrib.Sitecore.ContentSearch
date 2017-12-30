@@ -7,6 +7,7 @@ Properties {
     $outPath = $null
     $SitecoreVersion = $null
     $Version = $null
+    $NugetApiKey = $null
 }
 
 Task Clean -requiredVariables srcPath, outPath -description 'Clean the build' {
@@ -34,8 +35,16 @@ Task Pack -depends Build -requiredVariables srcPath, outPath {
     dotnet pack $srcPath --configuration Release --no-restore --no-build --output $outPath /property:Version=$script:SitecoreVersion /property:SitecoreVersion=$script:SitecoreVersion /property:VersionPrefix=$script:SitecoreVersion /property:VersionSuffix=""
 }
 
-Task Publish -depends Pack {
+Task Publish -depends Pack -requiredVariables outPath,NugetApiKey {
     #Nothing yet
+
+    if(Test-Path -Path $outPath)
+    {
+        Get-ChildItem -path $outPath -Recurse -Include "*.$SitecoreVersion.nupkg" | ForEach-Object { 
+            Write-Host $_.FullName -ForegroundColor Green
+        
+        }
+    }
 }
 
-Task default -depends Pack
+Task default -depends Publish
