@@ -8,6 +8,7 @@ Properties {
     $SitecoreVersion = $null
     $Version = $null
     $NugetApiKey = $null
+    $NugetSource = "https://api.nuget.org/v3/index.json"
 }
 
 Task Clean -requiredVariables srcPath, outPath -description 'Clean the build' {
@@ -35,13 +36,14 @@ Task Pack -depends Build -requiredVariables srcPath, outPath {
     dotnet pack $srcPath --configuration Release --no-restore --no-build --output $outPath /property:Version=$script:SitecoreVersion /property:SitecoreVersion=$script:SitecoreVersion /property:VersionPrefix=$script:SitecoreVersion /property:VersionSuffix=""
 }
 
-Task Publish -depends Pack -requiredVariables outPath,NugetApiKey {
+Task Publish -depends Pack -requiredVariables outPath,NugetApiKey, NugetSource {
     #Nothing yet
-
+    Assert ($NugetApiKey) "Nuget API key not set"
+    Assert ($NugetSource) "Nuget source not set"
     if(Test-Path -Path $outPath)
     {
         Get-ChildItem -path $outPath -Recurse -Include "*.$SitecoreVersion.nupkg" | ForEach-Object { 
-            Write-Host $_.FullName -ForegroundColor Green
+            dotnet nuget push $_.FullName --source "$NugetSource" --api-key "$NugetApiKey" --disable-buffering --no-symbols --force-english-output
         
         }
     }
