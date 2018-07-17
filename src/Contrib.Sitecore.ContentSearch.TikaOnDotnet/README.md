@@ -18,6 +18,7 @@ PM> Install-Package Contrib.Sitecore.ContentSearch.TikaOnDotnet
 
 Versions available
 
+* [Sitecore 8.2 Update 7(8.2.180406)](https://www.nuget.org/packages/Contrib.Sitecore.ContentSearch.TikaOnDotnet/8.2.180406)
 * [Sitecore 8.2 Update 6(8.2.171121)](https://www.nuget.org/packages/Contrib.Sitecore.ContentSearch.TikaOnDotnet/8.2.171121)
 * [Sitecore 8.2 Update 5(8.2.170728)](https://www.nuget.org/packages/Contrib.Sitecore.ContentSearch.TikaOnDotnet/8.2.170728)
 * [Sitecore 8.2 Update 4(8.2.170614)](https://www.nuget.org/packages/Contrib.Sitecore.ContentSearch.TikaOnDotnet/8.2.170614)

@@ -21,7 +21,7 @@ try {
 
     # Invoke the psake build
 
-    $sitecoreVersions = @("8.2.161115","8.2.161221","8.2.170407","8.2.170614","8.2.170728","8.2.171121")
+    $sitecoreVersions = @("8.2.161115","8.2.161221","8.2.170407","8.2.170614","8.2.170728","8.2.171121", "8.2.180406")
 
     $rootPath = Join-Path $PSScriptRoot ..
     $buildPath = Join-Path $rootPath build
