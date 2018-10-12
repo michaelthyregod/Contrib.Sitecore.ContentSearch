@@ -20,7 +20,7 @@
     <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Solr.IndexConfiguration.config.disabled" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="TikaOnDotnet.TextExtractor" Version="1.16.0" />
+    <PackageReference Include="TikaOnDotnet.TextExtractor" Version="1.17.1" />
   </ItemGroup>
   <ItemGroup Condition=" '$(SitecoreVersion)' == '8.2.161115' ">
     <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="8.2.161115">
