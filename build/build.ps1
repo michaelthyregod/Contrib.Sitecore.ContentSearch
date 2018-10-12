@@ -40,7 +40,8 @@ try {
             buildPath = $buildPath
             srcPath = $srcPath
             outPath = $outPath
-            Version = "1.0.0.0"
+            Version = "$sitecoreVersion.1"
+			BuildVersion = "1.0.0.0"
             SitecoreVersion = $sitecoreVersion
             NugetApiKey = $NugetApiKey
         }
