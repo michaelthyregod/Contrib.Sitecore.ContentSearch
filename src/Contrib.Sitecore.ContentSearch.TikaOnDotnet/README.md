@@ -26,6 +26,9 @@ Versions available
 * [Sitecore 8.2 Update 2(8.2.161221)](https://www.nuget.org/packages/Contrib.Sitecore.ContentSearch.TikaOnDotnet/8.2.161221.1)
 * [Sitecore 8.2 Update 1(8.2.161115)](https://www.nuget.org/packages/Contrib.Sitecore.ContentSearch.TikaOnDotnet/8.2.161115.1)
 
+## Known issues
+
+* Solr configuration for Sitecore Marketing was missing in previous versions. Because of this the configuration for Solr is disabled by default. To enable just uncomment the commented section in the "zzzSitecore.Marketing.Solr.IndexConfiguration.config.disabled" file.
 
 More info will come later here.
 
