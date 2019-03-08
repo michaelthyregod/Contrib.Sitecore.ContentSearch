@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <SitecoreVersion Condition=" '$(SitecoreVersion)' == '' ">9.0.180604</SitecoreVersion>
-    <TargetFramework Condition=" '$(SitecoreVersion)' == '' ">net452</TargetFramework>
+    <SitecoreVersion Condition=" '$(SitecoreVersion)' == '' ">8.2.180406</SitecoreVersion>
     <TargetFramework Condition=" '$(SitecoreVersion)' == '8.2.160729' ">net452</TargetFramework>
     <TargetFramework Condition=" '$(SitecoreVersion)' == '8.2.161115' ">net452</TargetFramework>
     <TargetFramework Condition=" '$(SitecoreVersion)' == '8.2.161221' ">net452</TargetFramework>
@@ -13,6 +12,7 @@
     <TargetFramework Condition=" '$(SitecoreVersion)' == '9.0.171002' ">net462</TargetFramework>
     <TargetFramework Condition=" '$(SitecoreVersion)' == '9.0.171219' ">net462</TargetFramework>
     <TargetFramework Condition=" '$(SitecoreVersion)' == '9.0.180604' ">net462</TargetFramework>
+    <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Azure.DefaultIndexConfiguration.config.disabled" />
