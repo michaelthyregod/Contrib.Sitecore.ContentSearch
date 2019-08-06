@@ -3,7 +3,7 @@
 param(
     [string[]]$Tasks = @('default'),
     [string[]]$NugetApiKey = '',
-	[string]$patchVersion='1'
+	[string]$patchVersion=''
 )
 
 $init = Join-Path $PSScriptRoot init.ps1
@@ -41,7 +41,7 @@ try {
             buildPath = $buildPath
             srcPath = $srcPath
             outPath = $outPath
-            Version = "$sitecoreVersion.$patchVersion"
+            Version = "$sitecoreVersion"
 			BuildVersion = "1.0.0.0"
             SitecoreVersion = $sitecoreVersion
             NugetApiKey = $NugetApiKey

@@ -78,6 +78,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                                                                         _mimeTypeExcludes.Select(node => node.InnerText)
                                                                             .Contains(mimeTypeField.Value.ToLowerInvariant())))
                 {
+                    Log.Warn("Coud not find fallback field" , this);
                     return null;
                 }
 
@@ -88,7 +89,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                     return value;
                 }
             }
-
+            //Log.Warn("For some reason value to return is not possible to get" , this);
             return null;
         }
 

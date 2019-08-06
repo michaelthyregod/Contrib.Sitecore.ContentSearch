@@ -18,6 +18,7 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             Item item = indexable as SitecoreIndexableItem;
             if (item == null)
             {
+                Log.Warn("Item to index is null", this);
                 return null;
             }
 
@@ -25,11 +26,13 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 
             if (media == null)
             {
+                Log.Warn("Media to index is null", this);
                 return null;
             }
 
             if (item.Fields["Extension"] == null)
             {
+                Log.Warn("Field Extension is null", this);
                 return null;
             }
 
@@ -61,13 +64,18 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
                 try
                 {
                     var textExtractor = new TextExtractor();
-                    return textExtractor.Extract(tempFilePath);
+                    return textExtractor.Extract(tempFilePath).Text;
                 }
                 catch (Exception e)
                 {
-                    Log.SingleWarn(e.Message, this);
+                    Log.Warn(e.Message, this);
                     return null;
                 }
+            }
+            catch (Exception exception)
+            {
+                Log.Warn(exception.Message, this);
+                return null;
             }
             finally
             {
