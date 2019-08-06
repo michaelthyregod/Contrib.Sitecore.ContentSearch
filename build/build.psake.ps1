@@ -25,7 +25,6 @@ Task Clean -requiredVariables srcPath, outPath -description 'Clean the build' {
 			$objFolderDirectory = $objFolder.FullName
 			if(Test-Path -Path $objFolderDirectory)
 			{
-				Write-Host "polle" -ForegroundColor Green
 				Remove-Item -Path $objFolderDirectory -Recurse -Force
 			}
 		}
