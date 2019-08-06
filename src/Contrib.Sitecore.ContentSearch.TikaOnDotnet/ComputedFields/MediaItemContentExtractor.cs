@@ -10,6 +10,7 @@ using Sitecore.Reflection;
 
 namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
 {
+    // ReSharper disable once UnusedMember.Global
     public sealed class MediaItemContentExtractor : AbstractComputedIndexField
     {
         private readonly Dictionary<string, IComputedIndexField> _mimeTypeComputedFields =
@@ -177,17 +178,17 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             {
                 if (_extensionExcludes.First().InnerText == "*")
                 {
-                    foreach (var extensionInculde in _extensionIncludes)
+                    foreach (var extensionInclude in _extensionIncludes)
                     {
-                        if (extensionInculde.Attributes?["type"] != null)
+                        if (extensionInclude.Attributes?["type"] != null)
                         {
-                            AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText,
-                                ReflectionUtil.CreateObject(extensionInculde.Attributes["type"].Value) as
+                            AddMediaItemContentExtractorByFileExtension(extensionInclude.InnerText,
+                                ReflectionUtil.CreateObject(extensionInclude.Attributes["type"].Value) as
                                     IComputedIndexField);
                         }
                         else
                         {
-                            AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText, extractor);
+                            AddMediaItemContentExtractorByFileExtension(extensionInclude.InnerText, extractor);
                         }
                     }
                 }
@@ -201,17 +202,17 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             }
             else
             {
-                foreach (var extensionInculde in _extensionIncludes)
+                foreach (var extensionInclude in _extensionIncludes)
                 {
-                    if (extensionInculde.Attributes?["type"] != null)
+                    if (extensionInclude.Attributes?["type"] != null)
                     {
-                        AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText,
-                            ReflectionUtil.CreateObject(extensionInculde.Attributes["type"].Value) as
+                        AddMediaItemContentExtractorByFileExtension(extensionInclude.InnerText,
+                            ReflectionUtil.CreateObject(extensionInclude.Attributes["type"].Value) as
                                 IComputedIndexField);
                     }
                     else
                     {
-                        AddMediaItemContentExtractorByFileExtension(extensionInculde.InnerText, extractor);
+                        AddMediaItemContentExtractorByFileExtension(extensionInclude.InnerText, extractor);
                     }
                 }
             }

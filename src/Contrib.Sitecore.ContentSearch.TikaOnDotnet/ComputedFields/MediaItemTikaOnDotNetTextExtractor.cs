@@ -71,7 +71,10 @@ namespace Contrib.Sitecore.ContentSearch.TikaOnDotnet.ComputedFields
             }
             finally
             {
-                File.Delete(tempFilePath);
+                if (File.Exists(tempFilePath))
+                {
+                    File.Delete(tempFilePath);
+                }
             }
         }
 

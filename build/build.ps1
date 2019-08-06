@@ -21,7 +21,7 @@ try {
 
     # Invoke the psake build
 
-    $sitecoreVersions = @("8.2.161115","8.2.161221","8.2.170407","8.2.170614","8.2.170728","8.2.171121", "8.2.180406")
+    $sitecoreVersions = @("8.2.161115","8.2.161221","8.2.170407","8.2.170614","8.2.170728","8.2.171121", "8.2.180406","9.0.180604")
 
     $rootPath = Join-Path $PSScriptRoot ..
     $buildPath = Join-Path $rootPath build
@@ -40,7 +40,7 @@ try {
             buildPath = $buildPath
             srcPath = $srcPath
             outPath = $outPath
-            Version = "$sitecoreVersion.1"
+            Version = "$sitecoreVersion.2"
 			BuildVersion = "1.0.0.0"
             SitecoreVersion = $sitecoreVersion
             NugetApiKey = $NugetApiKey

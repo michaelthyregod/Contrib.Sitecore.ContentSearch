@@ -1,80 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
-    <SitecoreVersion Condition=" '$(SitecoreVersion)' == '' ">8.2.161115</SitecoreVersion>
+    <TargetFramework>net462</TargetFramework>
+    <SitecoreVersion Condition=" '$(SitecoreVersion)' == '' ">9.0.180604</SitecoreVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Azure.DefaultIndexConfiguration.config.disabled" />
+    <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Azure.DefaultIndexConfiguration.config" />
     <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Lucene.DefaultIndexConfiguration.config" />
-    <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Solr.DefaultIndexConfiguration.config.disabled" />
-    <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Azure.IndexConfiguration.config.disabled" />
+    <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Solr.DefaultIndexConfiguration.config" />
+    <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Azure.IndexConfiguration.config" />
     <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Lucene.IndexConfiguration.config" />
-    <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Solr.IndexConfiguration.config.disabled" />
+    <None Remove="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Solr.IndexConfiguration.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Azure.DefaultIndexConfiguration.config.disabled" />
+    <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Azure.DefaultIndexConfiguration.config" />
     <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Lucene.DefaultIndexConfiguration.config" />
-    <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Solr.DefaultIndexConfiguration.config.disabled" />
-    <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Azure.IndexConfiguration.config.disabled" />
+    <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.ContentSearch.Solr.DefaultIndexConfiguration.config" />
+    <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Azure.IndexConfiguration.config" />
     <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Lucene.IndexConfiguration.config" />
-    <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Solr.IndexConfiguration.config.disabled" />
+    <Content Include="App_Config\Include\Contrib.Sitecore.ContentSearch\zzzSitecore.Marketing.Solr.IndexConfiguration.config" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="TikaOnDotnet.TextExtractor" Version="1.17.1" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(SitecoreVersion)' == '8.2.161115' ">
-    <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="8.2.161115">
+  <ItemGroup Condition=" '$(SitecoreVersion)' == '9.0.180604' ">
+    <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="9.0.180604">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Sitecore.Kernel.NoReferences" Version="8.2.161115">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(SitecoreVersion)' == '8.2.161221' ">
-    <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="8.2.161221">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Sitecore.Kernel.NoReferences" Version="8.2.161221">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(SitecoreVersion)' == '8.2.170407' ">
-    <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="8.2.170407">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Sitecore.Kernel.NoReferences" Version="8.2.170407">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(SitecoreVersion)' == '8.2.170614' ">
-    <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="8.2.170614">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Sitecore.Kernel.NoReferences" Version="8.2.170614">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(SitecoreVersion)' == '8.2.170728' ">
-    <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="8.2.170728">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Sitecore.Kernel.NoReferences" Version="8.2.170728">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(SitecoreVersion)' == '8.2.171121' ">
-    <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="8.2.171121">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Sitecore.Kernel.NoReferences" Version="8.2.171121">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(SitecoreVersion)' == '8.2.180406' ">
-    <PackageReference Include="Sitecore.ContentSearch.NoReferences" Version="8.2.180406">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Sitecore.Kernel.NoReferences" Version="8.2.180406">
+    <PackageReference Include="Sitecore.Kernel.NoReferences" Version="9.0.180604">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
